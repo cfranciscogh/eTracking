@@ -6,7 +6,7 @@
         id        = "com.estrategit.tracking"
         version   = "1.0.0">
 
-    <name>e-Tracking</name>
+    <name>T-Track</name>
 
     <description>
        Tracking de Entrega de Pedidos
@@ -60,7 +60,7 @@
     -->
 	
 	<!-- Define app icon for each platform. -->
-    <icon src="logo_toscargo.png" />
+    <icon src="icono_toscargo.png" />
 	<platform name="android">
     <!-- you can use any density that exists in the Android project -->
 		<splash src="res/icon/android/icon-36-ldpi.png" density="land-hdpi"/>

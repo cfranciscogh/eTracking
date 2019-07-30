@@ -60,7 +60,7 @@
     -->
 	
 	<!-- Define app icon for each platform. -->
-    <icon src="icon.png" />
+    <icon src="logo_toscargo.png" />
 	<platform name="android">
     <!-- you can use any density that exists in the Android project -->
 		<splash src="res/icon/android/icon-36-ldpi.png" density="land-hdpi"/>

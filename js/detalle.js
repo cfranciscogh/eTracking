@@ -2,9 +2,9 @@
 var  latitude = "";
 var longitude = "";
 var check = true;
-var dominio = "http://wstrackebo.e-strategit.com/"; 
-var dominio_extranet = "http://trackebo.logit.com.pe/";
-var dominio_foto = "http://wstrackebo.e-strategit.com/";
+var dominio = "http://wstrackebo.e-strategit.com/";
+var dominio_extranet = "http://toscargo.e-strategit.com/";
+var dominio_foto = "http://toscargo.e-strategit.com/";
 //var dominio = "http://localhost:34927/";
 function onSuccess(position) {
    latitude = position.coords.latitude;
@@ -30,7 +30,7 @@ function sendImage(src) {
     navigator.camera.getPicture(success, fail, {quality: 45, sourceType: src});
 
                              function success(imageData) {
-                             var url = dominio_extranet + '/TransportesMeridian/Util/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
+                                 var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
                              var params = {image: imageData};
 
                              // send the data
@@ -66,7 +66,7 @@ $(document).ready(function(e) {
 		  //console.log($("#IDPedido").val());
            $.ajax({
                type: "POST",
-               url: dominio + 'transportes/Upload/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),
+               url: dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),
                contentType: false,
                processData: false,
                data: data,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-          package="com.estrategit.tracking" 
+          package="com.toscanos.ttrack" 
           android:versionName="1.1" 
           android:versionCode="1">
  <uses-permission android:name="android.permission.CAMERA" />

@@ -1,9 +1,9 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* CSS Document */
 .fondo{
-	background-image: url(../img/bgLogin.jpg);
+	background-image: url('http://toscargo.e-strategit.com/imagenes/slider-toscargo-1.jpg');
 	background-repeat: no-repeat;
-	background-position: center top;
+	background-position: left top;
 	background-size:cover;
 	background-color:transparent !important;
 }

@@ -425,8 +425,8 @@ $(document).ready(function(e) {
 		}	
 	else {
 		$.ajax({
-		   //url : dominio + "transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
-		   url: "http://localhost:34927/Transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
+		   url : dominio + "transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
+		   //url: "http://localhost:34927/Transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
 		   type: "POST",
 			dataType : "json",
 			data : JSON.stringify(parametros),

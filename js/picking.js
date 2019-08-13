@@ -27,7 +27,7 @@ $(document).ready(function(e) {
     	});
 		 
 		if ( IDPedido == ""){
-			alerta('Debe seleccionar 1 o mas OC');
+		    alerta('Debe seleccionar 1 o m\u00E1s registros');
 			return;	
 		}
 		
@@ -47,7 +47,7 @@ $(document).ready(function(e) {
 			console.log(resultado);
 			$.mobile.loading('hide');
 			if ( resultado == 1 ){
-				alerta("Picking realizado con éxito");
+			    alerta("Picking realizado con \u00E9xito");
 				$("#myPopup").popup("close");
 				getProgramaciones();
 				//alert(resultado[0].mensaje);
@@ -108,7 +108,7 @@ $(document).ready(function(e) {
 			//console.log(resultado);
 			$.mobile.loading('hide');
 			if ( resultado == 1 ){
-				alerta("Se libero las OC con éxito");
+			    alerta("Se libero con \u00E9xito");
 				getProgramaciones();
 				$("#myPopup").popup("close");
 			}

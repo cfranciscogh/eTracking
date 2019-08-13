@@ -6,11 +6,16 @@ var dominio = "http://wstrackebo.e-strategit.com/";
 var dominio_extranet = "http://toscargo.e-strategit.com/";
 var dominio_foto = "http://toscargo.e-strategit.com/";
 //var dominio = "http://localhost:34927/";
+function miubicacion() {
+    alerta("Mi ubicaci\u00F3n: " + latitude + " " + longitude);
+}
 function onSuccess(position) {
    latitude = position.coords.latitude;
    longitude = position.coords.longitude;
 }
-
+function onError(error) {
+    console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+}
 // onError Callback receives a PositionError object
 //
 
@@ -20,9 +25,7 @@ function quitarFoto(IDFoto, ctr){
 	}
 }
 
-function onError(error) {
-    console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
-}
+
 
 function sendImage(src) {
 
@@ -217,17 +220,13 @@ $(document).ready(function(e) {
 	 
 	
 	$("#guardarTracking").click(function(e) {
-        e.preventDefault();
-		
+        e.preventDefault();		
 		if ( latitude == "" ||  longitude == ""){
-			//alert("Ingrese DNI");
 			//alerta("No se puede obtener información de ubicación, revise si su GPS se encuentra activo o tenga cobertura de red");
 			//return;
-		}
-			
+		}			
 			
 		if ( $("#hora").val() == "" ){
-			//alert("Ingrese Tiempo Aprox. de llegada");
 			alerta("Ingrese Tiempo Aprox. de llegada");
 			$("#hora").focus();
 			return;
@@ -245,18 +244,18 @@ $(document).ready(function(e) {
 				//return;
 			}
 			if ( $("#hora_inicio").val() == "" ){
-				alerta("Ingrese hora de inicio de atención");
-				$("#hora_inicio").focus();
-				return;
+				//alerta("Ingrese hora de inicio de atención");
+				//$("#hora_inicio").focus();
+				//return;
 			}			
 			if ( $("#hora_fin").val() == "" ){
-				alerta("Ingrese hora de fin de atención");
-				$("#hora_fin").focus();
-				return;
+				//alerta("Ingrese hora de fin de atención");
+				//$("#hora_fin").focus();
+				//return;
 			}	
 		}
 		
-		if ( $("#estado").val() == 5 || $("#estado").val() == 7 ){
+		if ($("#estado").val() == 5 || $("#estado").val() == 6 || $("#estado").val() == 7) {
 			if ( $("#hora_inicio").val() == "" ){
 				alerta("Ingrese hora de inicio de atención");
 				$("#hora_inicio").focus();
@@ -266,20 +265,22 @@ $(document).ready(function(e) {
 				alerta("Ingrese hora de fin de atención");
 				$("#hora_fin").focus();
 				return;
-			}	
-			if ( $("#incidencia").val() == "0" ){
-				alerta("Seleccionar incidencia");
-				$("#incidencia").focus();
-				return;
-			}
+			}	 
 		}
 		
+		if ($("#estado").val() == 5 || $("#estado").val() == 7) {		    
+		    if ($("#incidencia").val() == "0") {
+		        alerta("Seleccionar incidencia");
+		        $("#incidencia").focus();
+		        return;
+		    }
+		}
 		
 	var parametros = new Object();
 	parametros.IDTranking = $("#IDTranking").val();	
 	parametros.IDPedido = $("#IDPedido").val();	
 	parametros.TiempoAproxLlegada = $("#hora").val();	
-	parametros.Recepcionado = $("#recepcionado").val();	
+	parametros.Recepcionado = ($("#estado").val() == 6 ? 1 : 0);// $("#recepcionado").val();
 	parametros.Nombre = $("#nombre").val();	
 	parametros.DNI = $("#dni").val();	
 	parametros.IDEstado = $("#estado").val();	
@@ -291,11 +292,10 @@ $(document).ready(function(e) {
 	parametros.HoraInicio = $("#hora_inicio").val();	 
 	parametros.HoraFin = $("#hora_fin").val();	
 	parametros.ParcialGrupo = 0;	 
-	//console.log(parametros);
+	console.log(parametros);
 	//return;
 		
-	$.mobile.loading('show'); 
-	
+	$.mobile.loading('show'); 	
 	
 	if ( parametros.IDEstado == 7){
 		
@@ -425,8 +425,9 @@ $(document).ready(function(e) {
 		}	
 	else {
 		$.ajax({
-		   url : dominio + "transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
-			type: "POST",
+		   //url : dominio + "transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
+		   url: "http://localhost:34927/Transportes/Distribucion/WSPedido.asmx/GenerarTrakingV3",
+		   type: "POST",
 			dataType : "json",
 			data : JSON.stringify(parametros),
 			contentType: "application/json; charset=utf-8",
@@ -435,8 +436,10 @@ $(document).ready(function(e) {
 				$.mobile.loading('hide');
 				 alerta(resultado.message);				 
 				 if ( resultado.code == 1){
-					 
-					if( $("#recepcionado").val() == 1 || $("#estado").val() == 5 ) {
+				     //console.log(resultado);
+				     if ($("#recepcionado").val() == 1 || $("#estado").val() == 5) {
+
+				        // console.log("parcial");
 						$("input[id*='chkProdcuto']").each(function(index, element) {				
 							var paramDetalle = new Object();
 							paramDetalle.IDPedido = 0;//$("#IDPedido").val();	
@@ -467,6 +470,7 @@ $(document).ready(function(e) {
 			},	
 			error : function(jqxhr) 
 			{
+			    console.log(jqxhr);
 			  alerta('Error de conexi\u00f3n, contactese con sistemas!');
 			}	
 		});		
@@ -482,17 +486,20 @@ $(document).ready(function(e) {
 
 
 function HabilitarIncidencia(control){
- $(" #btnIncidencia").hide();
- $("#DIVIncidencia, #panelParcial").hide();
+ $("#btnIncidencia").hide();
+ $("#DIVIncidencia, #panelParcial, .contentDatos, .contentAtencion").hide();
  
  if ( $(control).val() == 5 ){
-	 $("#DIVIncidencia").show();
+     $(".contentAtencion, #DIVIncidencia").show();
+ }
+ else if ($(control).val() == 6) {
+     $(".contentDatos, .contentAtencion").show();
  }
  else if ( $(control).val() == 4 ){
-	$(" #btnIncidencia").show("fast");
+	$("#btnIncidencia").show("fast");
  }
  else if (  $(control).val() == 7 ){
-	 $("#DIVIncidencia, #panelParcial").show();
+     $("#DIVIncidencia, #panelParcial, .contentDatos, .contentAtencion").show();
  }
  else{
  	
@@ -517,7 +524,8 @@ function setTracking(idPedido){
 		contentType: "application/json; charset=utf-8",
         success : function(data, textStatus, jqXHR) {
 			//console.log(data.d);
-			resultado = $.parseJSON(data.d);
+            resultado = $.parseJSON(data.d);
+            //console.log(resultado);
 			$.mobile.loading('hide');
 			 
 			if ( resultado.length > 0 ){
@@ -527,31 +535,43 @@ function setTracking(idPedido){
 					$("#IDTranking").val(resultado[i].IDTraking);
 					$("#IDPedido").val(resultado[i].IDPedido);
 					$("#observacion").val(resultado[i].Observacion.trim());
-					if (resultado[i].Recepcionado){
-						$("#recepcionado").val(1);
-						$("#recepcionado").slider('refresh');
-						$(".contentDatos").slideDown("fast");
-						$("#nombre").val(resultado[i].Nombre.trim());
-						$("#dni").val(resultado[i].DNI.trim());
-					}
+
 					HabilitarIncidencia($("#estado"));
 					$("#estado").html("");
 					$("#estado").append("<option selected value='"+resultado[i].IDEstado+"'>"+resultado[i].Estado+"</option>");
-					if ( resultado[i].IDEstado == 4 ) {
-						$("#btnIncidencia").fadeIn("fast");					 
-						$("#estado").append("<option value='5'>NO ENTREGADO</option>");
-						$("#estado").append("<option value='7'>ENTREGA PARCIAL</option>");
+					$("#DIVEstado").fadeIn("fast");
+
+					if (resultado[i].IDEstado == 3) {
+					    $("#estado").html("");
+					    $("#estado").append("<option value='3'>EN TRANSITO</option>"); 
+					}
+					if (resultado[i].IDEstado > 3) {
+					    $("#hora").val(resultado[i].TiempoAproxLlegadaFormat);
+					}
+					if (resultado[i].IDEstado == 4) { 
+					    $("#btnIncidencia").fadeIn("fast");
+					    $("#estado").append("<option value='6'>ENTREGADO</option>");
+					    $("#estado").append("<option value='5'>NO ENTREGADO</option>");
+					    $("#estado").append("<option value='7'>ENTREGA PARCIAL</option>");					    
+					}
+
+					if (resultado[i].IDEstado > 4) {
+					    $(".contentAtencion").fadeIn("fast");
+					    $("#hora_inicio").val(resultado[i].Hora_Inicio);
+					    $("#hora_fin").val(resultado[i].Hora_Termino);
+
+					    $("#guardarTracking").parent().hide();
+					    $("#guardarTracking").parent().parent().find("li").eq(1).css("width", "100%");
+					    //$("#DIVIncidencia").show();
+					}
+
+					if (resultado[i].IDEstado == 6) {
+					    $(".contentDatos").slideDown("fast");
+					    $("#nombre").val(resultado[i].Nombre.trim());
+					    $("#dni").val(resultado[i].DNI.trim());
+					    $("#DIVIncidencia").hide();
 					}
 					 
-					
-					if ( resultado[i].IDEstado > 3 ) {
-						$("#DIVEstado").fadeIn("fast");
-						$("#DIVRecepcionado").fadeIn("fast");
-						$(".contentAtencion").fadeIn("fast");
-						$("#hora").val(resultado[i].TiempoAproxLlegadaFormat);
-						$("#hora_inicio").val(resultado[i].Hora_Inicio);
-						$("#hora_fin").val(resultado[i].Hora_Termino);
-					}
 					
 					$("#estado").selectmenu( "refresh" )		
 					break;
@@ -637,14 +657,18 @@ function setPedido(idPedido){
 		resultado = $.parseJSON(data.d);
 			$.mobile.loading('hide');
 			if ( resultado.length > 0 ){
-				
+			    //console.log(resultado);
 				for (var i = 0; i<resultado.length;i++){
-					$(".oc").html(resultado[i].NroOrdenCompra);
-					$(".titulo").html(resultado[i].NroOrdenCompra);
+				    $(".oc").html(resultado[i].NroOrdenCompra);
+				    $(".pedido").html(resultado[i].NroPedido);
+					//$(".titulo").html(resultado[i].NroOrdenCompra);
 		 		 	$(".cliente").html(resultado[i].NombreCliente);
 					$(".dni").html(resultado[i].DocumentoCliente);
 					$(".blt").html(resultado[i].BLT_FME);
 					$(".fch_entrega").html(resultado[i].FechaEntregaFormat);
+					$(".fch_carga").html(resultado[i].FechaEntregaFormat);
+					$(".hr_entrega").html(resultado[i].HoraEntregaFormat);
+					$(".hr_carga").html(resultado[i].HoraCargaFormat);
 					$(".provincia").html(resultado[i].NomProvincia);
 					$(".distrito").html(resultado[i].NomDistrito);
 					$(".direccion").html(resultado[i].DireccionEntrega);
@@ -691,10 +715,7 @@ function setPedido(idPedido){
 	
 }
 
-
-
-
-
+ 
 function setDetallePedido(idPedido){
  
 	$.mobile.loading('show'); 
@@ -766,12 +787,18 @@ function setDetallePedidoGrupo(grupo,chofer,entidad){
 			//console.log(resultado);
 			$.mobile.loading('hide');
 			if ( pedidos.length > 0 ){	
-				$(".oc").html("");			
+			    $(".oc,.pedido,.blt").html("");
 				for (var i = 0; i<pedidos.length;i++){
-					if(i==(pedidos.length-1))
-						$(".oc").html($(".oc").html() + pedidos[i].NroOrdenCompra);	
-					else
-						$(".oc").html($(".oc").html() + pedidos[i].NroOrdenCompra + ", ");	
+				    if (i == (pedidos.length - 1)) {
+				        $(".oc").html($(".oc").html() + pedidos[i].NroOrdenCompra);
+				        $(".pedido").html($(".pedido").html() + pedidos[i].NroPedido);
+				        $(".blt").html($(".blt").html() + pedidos[i].BLT_FME);
+				    }
+				    else {
+				        $(".oc").html($(".oc").html() + pedidos[i].NroOrdenCompra + ", ");
+				        $(".pedido").html($(".pedido").html() + pedidos[i].NroPedido + ", ");
+				        $(".blt").html($(".blt").html() + pedidos[i].BLT_FME + ", ");
+				    }
 					
 					$("#panelOCs").append('<div data-role="collapsible"><h3>' + pedidos[i].NroOrdenCompra +'</h3><div id="panel' + pedidos[i].IDPedido  + '" class="content-panel"></div></div>');
 					$("#panelOCs").collapsibleset("refresh");

@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html> 
 <html>
 <head>
-	<title>OnTrack Meridian</title>
+	<title>T-Track</title>
     
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" type="text/css" href="css/themes/default/jquery.mobile.theme-1.4.5.min.css">
@@ -18,7 +18,7 @@
     <!--<script type='text/javascript' src="js/jqm-datebox.mode.flipbox.min.js"></script>-->
       <script type="text/javascript" src="js/jquery.mobile.datebox.i18n.es-ES.utf8.js"></script>
     <script src="js/funciones.js"></script> 
-    <script src="js/detalle.js?v=1.4"></script>  
+    <script src="js/detalle.js?v=1.6"></script>  
     <style type="text/css">
 	.imgPanel{
 		width:95%;
@@ -125,6 +125,7 @@
 <div data-role="page" class="fondo">
 
 	<div data-role="header" data-position="fixed" data-theme="a">
+        <a href="javascript:miubicacion();" data-ajax="false" data-icon="info" class="ui-btn-right">Ubicación</a>
 		<h1 id="tituloEmpresa" style="margin:0 5%;">Información de Tracking</h1>
 	</div><!-- /header -->
 
@@ -140,17 +141,22 @@
             </div>
            	
             <div id="one" class="ui-content ui-body ui-body-a">
-            	<h3 class="titulo oc"></h3>
+            	<!--<h3 class="titulo oc"></h3>-->
                  <p>
+                <b>Shipment:</b> <span class="oc">-</span><br>
+                <b>Delivery:</b> <span class="pedido">-</span><br>
                 <b>Cliente:</b> <span class="cliente">-</span><br>
-                <b>DNI:</b> <span class="dni">-</span><br>
-                <b>BLT:</b> <span class="blt">-</span><br>
+                <!--<b>DNI:</b> <span class="dni">-</span><br>-->
+                <b>Factura:</b> <span class="blt">-</span><br>
                 </p>
                 <hr>
                  <p>
+                <b>Fecha de Carga:</b> <span class="fch_carga">-</span><br>
+                <b>Hora de Carga:</b> <span class="hr_carga">-</span><br>
                 <b>Fecha de Entrega:</b> <span class="fch_entrega">-</span><br>
+                <b>Hora de Entrega:</b> <span class="hr_entrega">-</span><br>
 				<!--Departamento: LIMA<br>-->
-				<b>Provincia:</b> <span class="provincia">-</span><br>
+				<!--<b>Provincia:</b> <span class="provincia">-</span><br>-->
                 <b>Distrito:</b> <span class="distrito">-</span><br>
                 <b>Direcci&oacute;n:</b> <span class="direccion">-</span><br>
                 <b>Referencia:</b> <span class="referencia">-</span><br>
@@ -167,17 +173,31 @@
             </div>
             
             <div id="two" class="ui-content ui-body ui-body-a">
-            	<h3 class="titulo oc">-</h3>
-                
+            	<!--<h3 class="titulo oc">-</h3>--> 
             
-                <label for="hora">Tiempo Aprox. de llegada:</label>
+                <label for="hora">Indicar tiempo aprox. de llegada:</label>
                
                 	<input type="text" readonly name="hora" id="hora" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />                
                 
-                	 <div class="contentAtencion" style="display:none;">
-                  <label for="hora">Inicio de Atenci&oacute;n:</label>
+                <div id="DIVEstado" style="display:none; padding-top:5px;">
+                    <label for="estado">Estado:</label>
+                    <select name="estado" onChange="HabilitarIncidencia(this)" id="estado" data-native-menu="false">
+                        <option selected value="1">Pendiente</option>
+                    </select>
+                </div>
+
+                <a id="btnIncidencia" style="display:none;" href="#myPopup" data-rel="popup" data-position-to="window" data-icon="plus" data-inline="true" data-corners="true" data-shadow="true" data-wrapperels="span" class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus"> Regsitrar Incidencia </a>
+
+                <div id="DIVIncidencia" style="display:none">
+                    <label for="incidencia">Motivo:</label>
+                    <select name="incidencia" id="incidencia" data-native-menu="false"></select>
+                </div>
+
+                <div class="contentAtencion" style="display:none;">
+                    <h4 style="margin: 10px 0;padding-bottom: 10px;border-bottom: solid 1px #ccc;">Información de atención:</h4>
+                  <label for="hora">Hora de inicio de atenci&oacute;n:</label>
 				<input type="text" readonly name="hora_inicio" id="hora_inicio" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />    
-                 <label for="hora">Fin de Atenci&oacute;n:</label>   
+                 <label for="hora">Hora de fin de atenci&oacute;n:</label>   
 				<input type="text" readonly name="hora_fin" id="hora_fin" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />       
                 </div>    
                     
@@ -194,7 +214,7 @@
                 </div>
                 
                 <div class="contentDatos" style="display:none;">
-                <h4>Información de recepción:</h4>
+                <h4 style="margin: 10px 0;padding-bottom: 10px;border-bottom: solid 1px #ccc;">Información de recepción:</h4>
                 
                 <label for="nombre">Nombre/Razón Social:</label>
                 <input type="text" name="nombre" id="nombre" value=""  />
@@ -204,23 +224,11 @@
                 </div>
                
                
-               	<div id="DIVEstado" style="display:none">
-                <label for="estado">Estado:</label>
-                <select name="estado" onChange="HabilitarIncidencia(this)" id="estado" data-native-menu="false">
-                    <option selected value="1">Pendiente</option>
-                </select>
-                </div>
-                
-                  <a id="btnIncidencia" style="display:none;" href="#myPopup"  data-rel="popup" data-position-to="window" data-icon="plus" data-inline="true" data-corners="true" data-shadow="true"   data-wrapperels="span" class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus"> Regsitrar Incidencia </a>
-                
-                <div id="DIVIncidencia" style="display:none">
-                <label for="incidencia">Motivo:</label>
-                <select name="incidencia" id="incidencia" data-native-menu="false">
-                </select>
-                </div>
+ 
                 
                 <div id="panelParcial">
-                <label for="detalle">Detalle de Pedidos:</label>
+                    <h4 style="margin: 10px 0;padding-bottom: 10px;border-bottom: solid 1px #ccc;">Detalle de Pedidos:</h4>
+                <!--<label for="detalle">Detalle de Pedidos:</label>-->
                 	<div id="panelOCs" data-role="collapsible-set" data-theme="a" data-content-theme="a">        
     				</div>
                 </div>
@@ -321,7 +329,7 @@
 	<div data-role="footer">
 		<div data-role="navbar" data-iconpos="top">
 		<ul>
-			<li><a id="guardarTracking" data-icon="check">Guardar</a></li>
+			<li><a id="guardarTracking" data-icon="check">Confirmar</a></li>
 			<li><a id="regresarPanel" data-ajax="false" href="panel.html?idChofer=-1" data-icon="back">Regresar</a></li>			 
 		</ul>
 	</div><!-- /navbar -->

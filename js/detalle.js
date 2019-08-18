@@ -21,11 +21,30 @@ function onError(error) {
 
 function quitarFoto(IDFoto, ctr){
 	if ( confirm('Desea quitar esta foto?')){
-		$(ctr).parent().parent().remove();
+		$(ctr).parent().remove();
 	}
 }
 
+function base64toBlob(base64Data, contentType) {
+    contentType = contentType || 'image/jpeg';
+    var sliceSize = 1024;
+    var byteCharacters = atob(base64Data);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
 
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+        var begin = sliceIndex * sliceSize;
+        var end = Math.min(begin + sliceSize, bytesLength);
+
+        var bytes = new Array(end - begin);
+        for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+            bytes[i] = byteCharacters[offset].charCodeAt(0);
+        }
+        byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
+}
 
 function sendImage(src) {
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
@@ -43,7 +62,7 @@ function success(imageData) {
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
-        data.append("image64", imageData);
+        data.append("file0", base64toBlob(imageData));
         alert(data);
         $.ajax({
             type: "POST",

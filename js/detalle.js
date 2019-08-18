@@ -46,10 +46,34 @@ function base64toBlob(base64Data, contentType) {
     return new Blob(byteArrays, { type: contentType });
 }
 
+function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+}
+
 function sendImage(src) {
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
     navigator.camera.getPicture(success, fail, { 
-        quality: 100,
+        quality: 40,
         destinationType: navigator.camera.DestinationType.DATA_URL,
         sourceType: src,
         encodingType: navigator.camera.EncodingType.JPEG,
@@ -58,11 +82,12 @@ function sendImage(src) {
 }
  
 function success(imageData) {
-    alert(imageData);
+    //alert(imageData);
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
-        data.append("file0", base64toBlob(imageData));
+        var blob = b64toBlob(imageData, 'image/jpeg');
+        data.append("file", blob);
         alert(data);
         $.ajax({
             type: "POST",

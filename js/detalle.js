@@ -557,6 +557,9 @@ function setTracking(idPedido){
 					    $("#hora").val(resultado[i].TiempoAproxLlegadaFormat);
 					}
 					if (resultado[i].IDEstado == 4) { 
+					     $(".contentAtencion").fadeIn("fast");
+						 $("#hora_inicio").val(resultado[i].Hora_Inicio);
+					    $("#hora_fin").val(resultado[i].Hora_Termino);
 					    $("#btnIncidencia").fadeIn("fast");
 					    $("#estado").append("<option value='6'>ENTREGADO</option>");
 					    $("#estado").append("<option value='5'>NO ENTREGADO</option>");

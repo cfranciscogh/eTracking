@@ -31,18 +31,19 @@ function sendImage(src) {
 
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
     navigator.camera.getPicture(success, fail, {quality: 100, sourceType: src});
-
-                             function success(imageData) {
-                                 var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
-                             var params = {image: imageData};
-
-                             // send the data
-                             $.post(url, params, function(data) {
-                                     alert('sent');     
-                             });
-                             }
 }
 
+function success(imageData) {
+    var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
+    var params = { image: imageData };
+
+    // send the data
+    $.post(url, params, function (data) {
+        console.log(data)
+        alert(data);
+        //alert('sent');
+    });
+}
   function fail(message) { alert(message); }
 
   
@@ -557,9 +558,6 @@ function setTracking(idPedido){
 					    $("#hora").val(resultado[i].TiempoAproxLlegadaFormat);
 					}
 					if (resultado[i].IDEstado == 4) { 
-					     $(".contentAtencion").fadeIn("fast");
-						 $("#hora_inicio").val(resultado[i].Hora_Inicio);
-					    $("#hora_fin").val(resultado[i].Hora_Termino);
 					    $("#btnIncidencia").fadeIn("fast");
 					    $("#estado").append("<option value='6'>ENTREGADO</option>");
 					    $("#estado").append("<option value='5'>NO ENTREGADO</option>");

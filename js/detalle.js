@@ -28,11 +28,20 @@ function quitarFoto(IDFoto, ctr){
 
 
 function sendImage(src) {
-
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
-    navigator.camera.getPicture(success, fail, { quality: 100, sourceType: src, destinationType: destinationType.FILE_URI, saveToPhotoAlbum : true});
+    navigator.camera.getPicture(success, fail, { 
+        quality: 100,
+        destinationType: navigator.camera.DestinationType.DATA_URL,
+        sourceType: src,
+        encodingType: navigator.camera.EncodingType.JPEG,
+        saveToPhotoAlbum: true
+    });
 }
-
+quality: 50,
+    destinationType: navigator.camera.DestinationType.DATA_URL,
+    sourceType: navigator.camera.PictureSourceType.CAMERA,
+    encodingType: navigator.camera.EncodingType.JPEG,
+    saveToPhotoAlbum: true
 function success(imageData) {
     alert(imageData);
     if (window.FormData !== undefined) {

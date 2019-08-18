@@ -34,7 +34,7 @@ function sendImage(src) {
         destinationType: navigator.camera.DestinationType.DATA_URL,
         sourceType: src,
         encodingType: navigator.camera.EncodingType.JPEG,
-        saveToPhotoAlbum: true
+        saveToPhotoAlbum: false
     });
 }
  
@@ -44,7 +44,7 @@ function success(imageData) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
         data.append("image64", imageData);
-        console.log(data);
+        alert(data);
         $.ajax({
             type: "POST",
             url: dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),

@@ -39,12 +39,12 @@ function sendImage(src) {
 }
  
 function success(imageData) {
-    //alert(imageData);
+    alert(imageData);
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
         data.append("image64", imageData);
-        //console.log($("#IDPedido").val());
+        console.log(data);
         $.ajax({
             type: "POST",
             url: dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),

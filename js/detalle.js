@@ -37,11 +37,7 @@ function sendImage(src) {
         saveToPhotoAlbum: true
     });
 }
-quality: 50,
-    destinationType: navigator.camera.DestinationType.DATA_URL,
-    sourceType: navigator.camera.PictureSourceType.CAMERA,
-    encodingType: navigator.camera.EncodingType.JPEG,
-    saveToPhotoAlbum: true
+ 
 function success(imageData) {
     alert(imageData);
     if (window.FormData !== undefined) {

@@ -30,10 +30,11 @@ function quitarFoto(IDFoto, ctr){
 function sendImage(src) {
 
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
-    navigator.camera.getPicture(success, fail, {quality: 100, sourceType: src});
+    navigator.camera.getPicture(success, fail, { quality: 100, sourceType: src, destinationType: destinationType.FILE_URI, saveToPhotoAlbum : true});
 }
 
 function success(imageData) {
+    alert(imageData);
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());

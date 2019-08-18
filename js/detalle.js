@@ -83,12 +83,13 @@ function sendImage(src) {
  
 function success(imageData) {
     //alert(imageData);
+    $.mobile.loading('show');
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
         var blob = b64toBlob(imageData, 'image/jpeg');
         data.append("file", blob);
-        alert(data);
+        //alert(data);
         $.ajax({
             type: "POST",
             url: dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),

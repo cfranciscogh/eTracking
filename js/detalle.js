@@ -58,8 +58,12 @@ function success(imageData) {
                     alerta(resp[1]);
                     setFotosPedido($.QueryString["IDPedido"]);
                 }
-                else
-                    alerta("Error, no se pudo subir la foto");
+                else {
+                    //alerta("Error, no se pudo subir la foto");
+                    alerta(resp[1]);
+                    alerta(resp[2]);
+                }
+                    
 
                 $.mobile.loading('hide');
                 $('#file').val("");

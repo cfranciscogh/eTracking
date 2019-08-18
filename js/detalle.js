@@ -34,15 +34,54 @@ function sendImage(src) {
 }
 
 function success(imageData) {
+    if (window.FormData !== undefined) {
+        var data = new FormData();
+        data.append("IDPedido", $("#IDPedido").val());
+        data.append("file0", imageData);
+        //console.log($("#IDPedido").val());
+        $.ajax({
+            type: "POST",
+            url: dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val(),
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (result) {
+                resp = result.toString().split("|");
+                console.log(resp);
+                if (resp[0] == 0) {
+                    alerta(resp[1]);
+                    setFotosPedido($.QueryString["IDPedido"]);
+                }
+                else
+                    alerta("Error, no se pudo subir la foto");
+
+                $.mobile.loading('hide');
+                $('#file').val("");
+            },
+            error: function (xhr, status, p3, p4) {
+                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                if (xhr.responseText && xhr.responseText[0] == "{")
+                    err = JSON.parse(xhr.responseText).Message;
+
+                $('#file').val("");
+                console.log(xhr);
+                console.log(status);
+                alerta("Error, no se pudo subir la foto");
+                $.mobile.loading('hide');
+            }
+        });
+    } else {
+        alert("This browser doesn't support HTML5 file uploads!");
+    }
+    /*
     var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
     var params = { image: imageData };
-
     // send the data
     $.post(url, params, function (data) {
         console.log(data)
         alert(data);
-        //alert('sent');
     });
+    */
 }
   function fail(message) { alert(message); }
 

@@ -30,7 +30,7 @@ function quitarFoto(IDFoto, ctr){
 function sendImage(src) {
 
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
-    navigator.camera.getPicture(success, fail, {quality: 45, sourceType: src});
+    navigator.camera.getPicture(success, fail, {quality: 100, sourceType: src});
 
                              function success(imageData) {
                                  var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
@@ -208,6 +208,8 @@ $(document).ready(function(e) {
 	setTracking($.QueryString["IDPedido"]);
 	setFotosPedido($.QueryString["IDPedido"]);
 	$("#IDPedido").val($.QueryString["IDPedido"]);
+	
+	
 	$("#regresarPanel").attr("href","panel.html?idChofer=" + $.QueryString["idChofer"] + "&empresa=" + $.QueryString["empresa"]);
 	
 	//$("#tituloEmpresa").html($.QueryString["empresa"]);
@@ -496,7 +498,8 @@ function HabilitarIncidencia(control){
      $(".contentDatos, .contentAtencion").show();
  }
  else if ( $(control).val() == 4 ){
-	$("#btnIncidencia").show("fast");
+     $("#btnIncidencia").show("fast");
+     $(".contentAtencion").show();
  }
  else if (  $(control).val() == 7 ){
      $("#DIVIncidencia, #panelParcial, .contentDatos, .contentAtencion").show();
@@ -505,7 +508,12 @@ function HabilitarIncidencia(control){
  	
  } 
  
- setIncidencias_Tracking($.QueryString["empresa"],$(control).val());
+ var IDEmpresa = $.QueryString["empresa"];
+ if (IDEmpresa == "ADMIN" || IDEmpresa == "TMERDI"){
+     IDEmpresa = $("#IDEmpresa").val();
+ }
+      
+ setIncidencias_Tracking(IDEmpresa, $(control).val());
  
 
 }
@@ -552,7 +560,10 @@ function setTracking(idPedido){
 					    $("#btnIncidencia").fadeIn("fast");
 					    $("#estado").append("<option value='6'>ENTREGADO</option>");
 					    $("#estado").append("<option value='5'>NO ENTREGADO</option>");
-					    $("#estado").append("<option value='7'>ENTREGA PARCIAL</option>");					    
+					    $("#estado").append("<option value='7'>ENTREGA PARCIAL</option>");
+					    $(".contentAtencion").fadeIn("fast");
+					    $("#hora_inicio").val(resultado[i].Hora_Inicio);
+					    $("#hora_fin").val(resultado[i].Hora_Termino);
 					}
 
 					if (resultado[i].IDEstado > 4) {
@@ -657,14 +668,16 @@ function setPedido(idPedido){
 		resultado = $.parseJSON(data.d);
 			$.mobile.loading('hide');
 			if ( resultado.length > 0 ){
-			    //console.log(resultado);
-				for (var i = 0; i<resultado.length;i++){
+			    console.log(resultado);
+			    for (var i = 0; i < resultado.length; i++) {
+			        $("#IDEmpresa").val(resultado[i].ENT_CODI);
 				    $(".oc").html(resultado[i].NroOrdenCompra);
 				    $(".pedido").html(resultado[i].NroPedido);
 					//$(".titulo").html(resultado[i].NroOrdenCompra);
 		 		 	$(".cliente").html(resultado[i].NombreCliente);
 					$(".dni").html(resultado[i].DocumentoCliente);
 					$(".blt").html(resultado[i].BLT_FME);
+					$(".ref1").html(resultado[i].ReferenciaCliente1);
 					$(".fch_entrega").html(resultado[i].FechaEntregaFormat);
 					$(".fch_carga").html(resultado[i].FechaEntregaFormat);
 					$(".hr_entrega").html(resultado[i].HoraEntregaFormat);
@@ -890,17 +903,18 @@ function setFotosPedido(idPedido){
 			$.mobile.loading('hide');
 			var html = "";
 			if ( resultado.length > 0 ){
-				html = "<table width='100%'><tr>";		
+				//html = "<table width='100%'><tr>";		
 				for (var i = 0; i<resultado.length;i++){
-					html += "<td style='vertical-align:top;' width='50%'><div class='imgPanel'><img src='"+ resultado[i].Ubicacion.replace("~",dominio_foto) + "' width='100%'/> <a onclick='quitarFoto("+ resultado[i].IDFoto + ", this)'>Borrar</a></div></td>";
-					if ( (i%2)!=0 && i>0 )
-						html += "</tr><tr>"; 			 
+					//html += "<td style='vertical-align:top;' width='50%'><div class='imgPanel'><img src='"+ resultado[i].Ubicacion.replace("~",dominio_foto) + "' width='100%'/> <a onclick='quitarFoto("+ resultado[i].IDFoto + ", this)'>Borrar</a></div></td>";
+				    html += "<div class='imgPanel'><div style='background-image:url(" + resultado[i].Ubicacion.replace("~", dominio_foto) + ");height: 180px;background-position: center;background-size: cover;'></div> <a onclick='quitarFoto(" + resultado[i].IDFoto + ", this)'>Borrar</a></div>";
+				    //if ( (i%2)!=0 && i>0 )
+						//html += "</tr><tr>"; 			 
 				}
-				html += "</tr></table>";		
+				//html += "</tr></table>";		
 				$(".panelFotos").append(html);	
 			}
 			else
-				$(".panelFotos").html("<h3>No se encontro informaci&oacute;n</h3>");
+			    $(".panelFotos").html("<h3 style='margin:0px;'>No se encontrar&oacute;n imagenes</h3>");
 			
         },
 

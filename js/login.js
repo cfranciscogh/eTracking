@@ -41,7 +41,7 @@ var loginValidar = function(){
 					if ( empresas.length > 0)
 				  		location.href = "panel.html?idChofer=" + resultado.datos[0].codigo + "&empresa=" + empresas[0].ENT_CODI;
 					else
-						location.href = "panel.html?idChofer=" + resultado.datos[0].codigo + "&empresa=TMERDI";
+						location.href = "panel.html?idChofer=" + resultado.datos[0].codigo + "&empresa=ADMIN";
 				},
 				error : function(jqxhr) 
 				{

@@ -39,11 +39,11 @@ function sendImage(src) {
 }
  
 function success(imageData) {
-    alert(imageData);
+    //alert(imageData);
     if (window.FormData !== undefined) {
         var data = new FormData();
         data.append("IDPedido", $("#IDPedido").val());
-        data.append("file0", imageData);
+        data.append("image64", imageData);
         //console.log($("#IDPedido").val());
         $.ajax({
             type: "POST",

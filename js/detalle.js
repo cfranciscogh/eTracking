@@ -73,7 +73,7 @@ function b64toBlob(b64Data, contentType, sliceSize) {
 function sendImage(src) {
     src = (src == 'library') ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA;
     navigator.camera.getPicture(success, fail, { 
-        quality: 40,
+        quality: 70,
         destinationType: navigator.camera.DestinationType.DATA_URL,
         sourceType: src,
         encodingType: navigator.camera.EncodingType.JPEG,
@@ -111,7 +111,7 @@ function success(imageData) {
                     
 
                 $.mobile.loading('hide');
-                $('#file').val("");
+                $('#fileFoto').val("");
             },
             error: function (xhr, status, p3, p4) {
                 var err = "Error " + " " + status + " " + p3 + " " + p4;
@@ -126,7 +126,8 @@ function success(imageData) {
             }
         });
     } else {
-        alert("This browser doesn't support HTML5 file uploads!");
+        alert("This app doesn't support file uploads!");
+        $.mobile.loading('show');
     }
     /*
     var url = dominio_extranet + '/Public/Servicios/UploadImageTracking.ashx?IDPedido=' + $("#IDPedido").val();
@@ -138,7 +139,9 @@ function success(imageData) {
     });
     */
 }
-  function fail(message) { alert(message); }
+function fail(message) {
+    //alert(message);
+}
 
   
 //document.addEventListener("deviceready", onDeviceReady, false);

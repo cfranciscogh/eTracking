@@ -389,6 +389,15 @@ $(document).ready(function(e) {
 		    }
 		}
 		
+		if ($("#estado").val() == 6 || $("#estado").val() == 7) {		    
+		    if ($(".imgPanel").length == 0) {
+		        alerta("Debe cargar una foto antes de cerrar el pedido.");
+		        return;
+		    }
+		}
+		
+		
+		
 	var parametros = new Object();
 	parametros.IDTranking = $("#IDTranking").val();	
 	parametros.IDPedido = $("#IDPedido").val();	

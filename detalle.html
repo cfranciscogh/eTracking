@@ -18,7 +18,7 @@
     <!--<script type='text/javascript' src="js/jqm-datebox.mode.flipbox.min.js"></script>-->
       <script type="text/javascript" src="js/jquery.mobile.datebox.i18n.es-ES.utf8.js"></script>
     <script src="js/funciones.js"></script> 
-    <script src="js/detalle.js?v=1.0.1"></script>  
+    <script src="js/detalle.js?v=1.0.4"></script>  
     <style type="text/css">
 	.imgPanel{
 		width:50%;
@@ -205,9 +205,11 @@
 
                 <div class="contentAtencion" style="display:none;">
                     <h4 style="margin: 10px 0;padding-bottom: 10px;border-bottom: solid 1px #ccc;">Información de atención:</h4>
-                  <label for="hora">Hora de inicio de atenci&oacute;n:</label>
+                    <label for="hora_llegada">Hora de Llegada:</label>
+                    <input type="text" readonly name="hora_llegada" id="hora_llegada" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />
+                <label for="hora_inicio">Hora de inicio de atenci&oacute;n:</label>
 				<input type="text" readonly name="hora_inicio" id="hora_inicio" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />    
-                 <label for="hora">Hora de fin de atenci&oacute;n:</label>   
+                 <label for="hora_fin">Hora de fin de atenci&oacute;n:</label>   
 				<input type="text" readonly name="hora_fin" id="hora_fin" data-role="datebox" data-options='{"mode":"timebox", "useNewStyle":true, "overrideTimeFormat": 12}' />       
                 </div>    
                     

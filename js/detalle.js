@@ -254,7 +254,8 @@ $(document).ready(function(e) {
 	parametros.Incidencia = $("input[name*=tipoIncidencia]:checked").val();	 
 	parametros.FlagMail = 0;
 	parametros.HoraInicio = $("#hora_inicio").val();	 
-	parametros.HoraFin = $("#hora_fin").val();	 
+	parametros.HoraFin = $("#hora_fin").val();
+	parametros.HoraLlegada = $("#hora_llegada").val();
 	//console.log(parametros);
 	//console.log(parametros);
 	//return;
@@ -356,22 +357,34 @@ $(document).ready(function(e) {
 		}
 		
 		if ($("#estado").val() == 5 || $("#estado").val() == 6 || $("#estado").val() == 7) {
-			if ( $("#hora_inicio").val() == "" ){
-				alerta("Ingrese hora de inicio de atención");
-				$("#hora_inicio").focus();
+			if ( $("#hora_llegada").val() == "" ){
+				alerta("Ingrese hora de llegada al punto");
+				$("#hora_llegada").focus();
 				return;
 			}			
 			if ( $("#hora_fin").val() == "" ){
 				alerta("Ingrese hora de fin de atención");
 				$("#hora_fin").focus();
 				return;
-			}	 
+			}
+			if ($("#hora_fin").val() == "") {
+			    alerta("Ingrese hora de fin de atención");
+			    $("#hora_fin").focus();
+			    return;
+			}
 		}
 		
 		if ($("#estado").val() == 5 || $("#estado").val() == 7) {		    
 		    if ($("#incidencia").val() == "0") {
 		        alerta("Seleccionar incidencia");
 		        $("#incidencia").focus();
+		        return;
+		    }
+		}
+
+		if ($("#estado").val() == 6 || $("#estado").val() == 7) {
+		    if ($(".imgPanel").length == 0) {
+		        alerta("Debe cargar una foto antes de cerrar el pedido.");
 		        return;
 		    }
 		}
@@ -390,7 +403,8 @@ $(document).ready(function(e) {
 	parametros.Incidencia = $("#incidencia").val();	 
 	parametros.FlagMail = 1;
 	parametros.HoraInicio = $("#hora_inicio").val();	 
-	parametros.HoraFin = $("#hora_fin").val();	
+	parametros.HoraFin = $("#hora_fin").val();
+	parametros.HoraLlegada = $("#hora_llegada").val();
 	parametros.ParcialGrupo = 0;	 
 	console.log(parametros);
 	//return;
@@ -631,7 +645,7 @@ function setTracking(idPedido){
         success : function(data, textStatus, jqXHR) {
 			//console.log(data.d);
             resultado = $.parseJSON(data.d);
-            //console.log(resultado);
+            console.log(resultado);
 			$.mobile.loading('hide');
 			 
 			if ( resultado.length > 0 ){
@@ -662,12 +676,15 @@ function setTracking(idPedido){
 					    $(".contentAtencion").fadeIn("fast");
 					    $("#hora_inicio").val(resultado[i].Hora_Inicio);
 					    $("#hora_fin").val(resultado[i].Hora_Termino);
+					    //alert(resultado[i].Hora_Llegada);
+					    $("#hora_llegada").val(resultado[i].Hora_Llegada);
 					}
 
 					if (resultado[i].IDEstado > 4) {
 					    $(".contentAtencion").fadeIn("fast");
 					    $("#hora_inicio").val(resultado[i].Hora_Inicio);
 					    $("#hora_fin").val(resultado[i].Hora_Termino);
+					    $("#hora_llegada").val(resultado[i].Hora_Llegada);
 
 					    $("#guardarTracking").parent().hide();
 					    $("#guardarTracking").parent().parent().find("li").eq(1).css("width", "100%");
